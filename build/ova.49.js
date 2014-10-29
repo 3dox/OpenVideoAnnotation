@@ -61,8 +61,6 @@ Util.mousePosition = function(b, d) {
     d = $(d).offsetParent()[0]
   }
   c = $(d).offset();
-  console.log(b)
-  console.log(c)
   return {
     top: b.pageY - c.top,
     left: b.pageX - c.left
@@ -174,7 +172,7 @@ Util.mousePosition = function(b, d) {
         var f = function() {
           d.annotations.showAnnotation(d.autoPlayAPI);
           $("html,body").animate({
-            scrollTop: $("#" + d.id_).offset().top
+            scrollTop: $("#" + d.id()).offset().top
           }, "slow")
         };
         if (d.techName == "Youtube") {
@@ -185,7 +183,7 @@ Util.mousePosition = function(b, d) {
       }
       i.refreshDesignPanel();
       d.on("fullscreenchange", function() {
-        if (d.isFullScreen()) {
+        if (d.isFullSsreen()) {
           $(d.annotator.wrapper[0]).addClass("vjs-fullscreen")
         } else {
           $(d.annotator.wrapper[0]).removeClass("vjs-fullscreen")
@@ -389,6 +387,7 @@ Util.mousePosition = function(b, d) {
       $(this.player.b).find(".vjs-anpanel-annotation .annotation").remove();
       for (var k in j) {
         var g = j[k];
+        console.log(this._isVideoJS(g))
         if (this._isVideoJS(g)) {
           var c = document.createElement("div"),
             i = document.createElement("span"),
@@ -400,9 +399,6 @@ Util.mousePosition = function(b, d) {
           d = Math.min(100, Math.max(0.2, f - e));
           c.className = "annotation";
           c.id = h;
-          console.log('refresh display');
-          console.log(c)
-          console.log(h)
           c.style.top = h + "em";
           c.style.left = e + "%";
           c.style.width = d + "%";
@@ -486,7 +482,6 @@ Util.mousePosition = function(b, d) {
         g = parseFloat($(e.b).css("height")),
         f = parseFloat($(e.controlBar.b).css("height")),
         d = (g - f) / c - 5;
-      console.log('asdfasdfasdf')
       this.BackAnDisplay.b.style.height = this.backDSBar.b.style.height = (d + "em");
       this.BackAnDisplay.b.style.top = this.backDSBar.b.style.top = "-" + (d + 3 + "em");
       this.BackAnDisplayScroll.b.children[0].style.top = "-" + (d + 5 + "em");
@@ -515,24 +510,13 @@ Util.mousePosition = function(b, d) {
         e = videojs.vd(h),
         d = {};
       g[0].style.display = "block";
-      console.log(this.player)
-      if (this.player.isFullScreen()) {
+      if (this.player.isFullscreen()) {
         d.top = c.top;
         d.left = c.left + (f.left - c.left) / 2
       } else {
         d.left = c.left + (f.left - c.left) / 2 - e.left;
         d.top = c.top - e.top
       }
-      console.log("--- left ---")
-      console.log(c.left)
-      console.log(f.left)
-      console.log(e.left)
-      console.log("--- top ---")
-      console.log(c.top)
-      console.log(e.top)
-      console.log(f.top)
-
-      console.log(g)
       g.css(d)
     },
     _onMouseDownRS: function(c) {
@@ -580,7 +564,7 @@ Util.mousePosition = function(b, d) {
         f = h.rangeTime,
         i = (typeof this.player != "undefined"),
         c = (typeof h.media != "undefined" && (h.media == "video" || h.media == "audio")),
-        d = (typeof h.target != "undefined" && h.target.container == l.id_),
+        d = (typeof h.target != "undefined" && h.target.container == l.id()),
         m = (typeof f != "undefined" && !isNaN(parseFloat(f.start)) && isFinite(f.start) && !isNaN(parseFloat(f.end)) && isFinite(f.end)),
         j = false;
       if (d) {
@@ -614,7 +598,6 @@ Util.mousePosition = function(b, d) {
     }
   });
   videojs.BigNewAnnotation.prototype.init_ = function() {
-    console.log(this)
     this.an = this.c.annotations;
     var c = this.an.options.optionsAnnotator;
     if (typeof c != "undefined" && typeof c.readOnly != "undefined" && c.readOnly) {
@@ -1025,7 +1008,7 @@ Util.mousePosition = function(b, d) {
     init: function(d, c) {
       videojs.Component.call(this, d, c);
       this.on("mousedown", this.onMouseDown);
-      this.on("mouseover", this.onMouseOver)
+      this.on("mouseover", this.onMouseOver);
     }
   });
   videojs.AnDisplay.prototype.init_ = function() {
@@ -1039,6 +1022,8 @@ Util.mousePosition = function(b, d) {
     })
   };
   videojs.AnDisplay.prototype.onMouseDown = function(i) {
+    console.log(i)
+    console.log('asdfdsf')
     var h = $(i.target).parents(".annotator-hl").andSelf(),
       d = this;
     if (h.hasClass("annotator-hl")) {
@@ -1150,7 +1135,6 @@ Util.mousePosition = function(b, d) {
   videojs.AnStat.prototype.init_ = function() {
     this.rs = this.c.rangeslider;
     this.an = this.c.annotations;
-    console.log(this)
     this.canvas = this.b.children[0]
   };
   videojs.AnStat.prototype.e = function() {
@@ -1654,7 +1638,7 @@ Annotator.Plugin.VideoJS = (function(b) {
         g.media = typeof l[0] != "undefined" ? l[0] : "video"
       }
       g.target = g.target || {};
-      g.target.container = o.id_ || "";
+      g.target.container = o.id() || "";
       g.target.src = o.l.sources[0].src || "";
       c = (o.l.sources[0].src.substring(o.l.sources[0].src.lastIndexOf("."))).toLowerCase();
       c = m ? "Youtube" : c;
@@ -1771,7 +1755,6 @@ Annotator.Plugin.VideoJS = (function(b) {
           top: parseFloat(p.element[0].style.top) + m,
           left: parseFloat(p.element[0].style.left)
         };
-      console.log(p)
       p.element.css(n);
       p.element.find(".annotator-controls").removeClass(p.classes.showControls);
       e.viewer.subscribe("hide", i)
@@ -1846,7 +1829,7 @@ OpenVideoAnnotation.Annotator = function(f, m) {
       d = "";
       for (var n in l) {
         if (e(l[n].b).find(o.target).length) {
-          d = l[n].id_
+          d = l[n].id()
         }
       }
       if (c != d) {
@@ -1907,7 +1890,7 @@ OpenVideoAnnotation.Annotator.prototype.newVideoAn = function(b) {
     a.one("playing", function() {
       a.annotations.newan();
       $("html,body").animate({
-        scrollTop: $("#" + a.id_).offset().top
+        scrollTop: $("#" + a.id()).offset().top
       }, "slow");
       a.pause()
     })
@@ -1943,7 +1926,7 @@ OpenVideoAnnotation.Annotator.prototype.playTarget = function(h) {
       if (this._isVideo(d)) {
         for (var e in m) {
           var i = m[e];
-          if (i.id_ == d.target.container && i.tech.l.source.src == d.target.src) {
+          if (i.id() == d.target.container && i.tech.l.source.src == d.target.src) {
             var b = d;
             var c = function() {
               if (i.techName == "Youtube") {
@@ -1959,7 +1942,7 @@ OpenVideoAnnotation.Annotator.prototype.playTarget = function(h) {
                 i.annotations.showAnnotation(b)
               }
               $("html,body").animate({
-                scrollTop: $("#" + i.id_).offset().top
+                scrollTop: $("#" + i.id()).offset().top
               }, "slow")
             };
             if (i.paused()) {
