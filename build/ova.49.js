@@ -387,7 +387,6 @@ Util.mousePosition = function(b, d) {
       $(this.player.b).find(".vjs-anpanel-annotation .annotation").remove();
       for (var k in j) {
         var g = j[k];
-        console.log(this._isVideoJS(g))
         if (this._isVideoJS(g)) {
           var c = document.createElement("div"),
             i = document.createElement("span"),
@@ -1022,8 +1021,6 @@ Util.mousePosition = function(b, d) {
     })
   };
   videojs.AnDisplay.prototype.onMouseDown = function(i) {
-    console.log(i)
-    console.log('asdfdsf')
     var h = $(i.target).parents(".annotator-hl").andSelf(),
       d = this;
     if (h.hasClass("annotator-hl")) {
